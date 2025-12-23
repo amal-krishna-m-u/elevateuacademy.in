@@ -36,12 +36,12 @@ body {
 }
 
 /* Custom Cursor Logic */
-html {
+.hide-system-cursor {
   cursor: none;
 }
 
 @media (max-width: 768px) {
-  html {
+  .hide-system-cursor {
     cursor: auto;
   }
 }

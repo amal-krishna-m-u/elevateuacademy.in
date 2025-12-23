@@ -6,13 +6,21 @@ export const CustomCursor = () => {
     const cursorRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Hide system cursor when this component is mounted
+        document.documentElement.classList.add('hide-system-cursor');
+
         const moveCursor = (e: MouseEvent) => {
             if (cursorRef.current) {
                 cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
             }
         };
         window.addEventListener('mousemove', moveCursor);
-        return () => window.removeEventListener('mousemove', moveCursor);
+
+        return () => {
+            window.removeEventListener('mousemove', moveCursor);
+            // Restore system cursor when component logic unmounts
+            document.documentElement.classList.remove('hide-system-cursor');
+        };
     }, []);
 
     return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { Phone, MapPin } from 'lucide-react';
-import { MagneticButton } from '../ui/MagneticButton';
+import { ContactSection } from './ContactSection';
 
 export const Footer = () => {
     return (
@@ -34,28 +34,7 @@ export const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="bg-[#111] p-10 rounded-3xl border border-gray-800 shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--brand-yellow)] blur-[80px] opacity-20"></div>
-                        <h3 className="text-2xl font-bold mb-8">Quick Enquiry</h3>
-                        <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                            <div>
-                                <input type="text" placeholder="Your Name" className="w-full bg-[#050505] border border-gray-800 p-4 rounded-xl text-white focus:border-[var(--brand-yellow)] focus:outline-none transition-colors" />
-                            </div>
-                            <div>
-                                <input type="tel" placeholder="Phone Number" className="w-full bg-[#050505] border border-gray-800 p-4 rounded-xl text-white focus:border-[var(--brand-yellow)] focus:outline-none transition-colors" />
-                            </div>
-                            <div>
-                                <select className="w-full bg-[#050505] border border-gray-800 p-4 rounded-xl text-white focus:border-[var(--brand-yellow)] focus:outline-none transition-colors appearance-none">
-                                    <option>Select Course...</option>
-                                    <option>Logistics & Supply Chain</option>
-                                    <option>Accounting & Finance</option>
-                                </select>
-                            </div>
-                            <MagneticButton variant="primary" className="w-full justify-center">
-                                Submit Application
-                            </MagneticButton>
-                        </form>
-                    </div>
+                    <ContactSection />
                 </div>
             </section>
 
