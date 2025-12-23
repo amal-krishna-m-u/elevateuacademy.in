@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { MagneticButton } from '../ui/MagneticButton';
 import { submitEnquiry } from '@/app/actions';
 import { Loader2 } from 'lucide-react';
+import TurnstileWidget from '../ui/TurnstileWidget';
 
 const initialState = {
     success: false,
@@ -29,6 +30,7 @@ import { useFormStatus } from 'react-dom';
 
 export const ContactSection = () => {
     const [state, formAction] = useActionState(submitEnquiry, initialState);
+    const [turnstileToken, setTurnstileToken] = useState('');
 
     return (
         <div className="bg-[#111] p-10 rounded-3xl border border-gray-800 shadow-2xl relative overflow-hidden">
@@ -62,6 +64,7 @@ export const ContactSection = () => {
                         </select>
                     </div>
                     {/* Honeypot Field (Hidden) to trap bots */}
+                    {/* Honeypot Field (Hidden) to trap bots */}
                     <input
                         type="text"
                         name="confirm_email"
@@ -69,6 +72,16 @@ export const ContactSection = () => {
                         tabIndex={-1}
                         autoComplete="off"
                     />
+
+                    {/* Turnstile Widget */}
+                    <div className="flex justify-center mb-4">
+                        <TurnstileWidget
+                            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+                            onVerify={(token) => setTurnstileToken(token)}
+                        />
+                    </div>
+                    {/* Send token to server */}
+                    <input type="hidden" name="cf-turnstile-response" value={turnstileToken} />
 
                     <SubmitButton />
                     {state.message && typeof state.message === 'string' && (

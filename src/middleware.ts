@@ -1,13 +1,7 @@
-import { auth } from "@/auth";
-import { NextResponse } from "next/server";
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
 
-export default auth((req) => {
-    // Protected Admin Routes
-    if (!req.auth && req.nextUrl.pathname.startsWith("/admin")) {
-        return NextResponse.redirect(new URL("/api/auth/signin", req.nextUrl));
-    }
-    return NextResponse.next();
-});
+export default NextAuth(authConfig).auth;
 
 export const config = {
     // CRITICAL: Only match /admin routes to prevent redirect loops on /api/auth
