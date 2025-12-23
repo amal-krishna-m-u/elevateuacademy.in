@@ -7,9 +7,11 @@ import { DateFormatter } from './DateFormatter';
 interface BlogCardProps {
     post: BlogPost;
     priority?: boolean;
+    mode?: 'link' | 'modal';
+    onClick?: () => void;
 }
 
-export const BlogCard = ({ post, priority = false }: BlogCardProps) => {
+export const BlogCard = ({ post, priority = false, mode = 'link', onClick }: BlogCardProps) => {
     return (
         <Link href={`/blog/${post.slug}`} className="group cursor-pointer block h-full flex flex-col">
             <div className="relative aspect-[4/3] bg-[#111] rounded-2xl overflow-hidden mb-6 border border-gray-800">

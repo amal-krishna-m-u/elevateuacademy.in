@@ -16,13 +16,13 @@ export const BlogModal = ({ post, isOpen, onClose }: BlogModalProps) => {
     if (!isOpen || !post) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 text-left">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4 text-left">
             <div className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={onClose}></div>
-            <div className="bg-[#0a0a0a] w-full max-w-4xl max-h-[95vh] overflow-y-auto relative rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-300 border border-gray-800">
+            <div className="bg-[#0a0a0a] w-full h-[100dvh] md:h-auto md:max-h-[95vh] md:max-w-4xl overflow-y-auto relative md:rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-300 md:border md:border-gray-800">
 
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 z-20 bg-black/50 hover:bg-[var(--brand-yellow)] text-white hover:text-black p-3 rounded-full transition-all backdrop-blur"
+                    className="fixed md:absolute top-4 right-4 md:top-6 md:right-6 z-50 bg-black/50 hover:bg-[var(--brand-yellow)] text-white hover:text-black p-3 rounded-full transition-all backdrop-blur"
                 >
                     <X size={24} />
                 </button>

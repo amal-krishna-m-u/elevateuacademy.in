@@ -5,9 +5,11 @@ import { BlogCard } from '../ui/BlogCard';
 
 interface BlogSectionProps {
     posts: BlogPost[];
+    onItemClick?: (post: BlogPost) => void;
+    mode?: 'link' | 'modal';
 }
 
-export const BlogSection = ({ posts }: BlogSectionProps) => {
+export const BlogSection = ({ posts, onItemClick, mode = 'link' }: BlogSectionProps) => {
     return (
         <section id="blog" className="py-32 bg-[#0a0a0a] border-t border-gray-900">
             <div className="container mx-auto px-6">
@@ -25,7 +27,12 @@ export const BlogSection = ({ posts }: BlogSectionProps) => {
 
                 <div className="grid md:grid-cols-3 gap-8">
                     {posts.map((post) => (
-                        <BlogCard key={post.sys.id} post={post} />
+                        <BlogCard
+                            key={post.sys.id}
+                            post={post}
+                            mode={mode}
+                            onClick={() => onItemClick?.(post)}
+                        />
                     ))}
                 </div>
             </div>

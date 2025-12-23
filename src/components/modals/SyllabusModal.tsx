@@ -15,16 +15,16 @@ export const SyllabusModal = ({ course, isOpen, onClose }: SyllabusModalProps) =
     if (!isOpen || !course) return null;
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 text-left">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4 text-left">
             <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose}></div>
-            <div className="bg-[#111] w-full max-w-5xl max-h-[90vh] overflow-y-auto relative border border-gray-800 rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="bg-[#111] w-full h-[100dvh] md:h-auto md:max-h-[90vh] md:max-w-5xl overflow-y-auto relative md:border md:border-gray-800 md:rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-300">
 
-                <div className="p-8 md:p-12 border-b border-gray-800 sticky top-0 bg-[#111]/95 backdrop-blur z-10 flex justify-between items-start">
+                <div className="p-6 md:p-12 border-b border-gray-800 sticky top-0 bg-[#111]/95 backdrop-blur z-20 flex justify-between items-start">
                     <div>
                         <span className="text-[var(--brand-yellow)] font-mono text-xs uppercase tracking-[0.2em] mb-2 block">Comprehensive Syllabus</span>
-                        <h2 className="text-3xl md:text-5xl font-black font-montserrat text-white leading-none">{course.title}</h2>
+                        <h2 className="text-2xl md:text-5xl font-black font-montserrat text-white leading-tight">{course.title}</h2>
                     </div>
-                    <button onClick={onClose} className="bg-white/10 hover:bg-[var(--brand-yellow)] hover:text-black text-white p-2 rounded-full transition-all">
+                    <button onClick={onClose} className="bg-white/10 hover:bg-[var(--brand-yellow)] hover:text-black text-white p-2 rounded-full transition-all flex-shrink-0 ml-4">
                         <X size={24} />
                     </button>
                 </div>

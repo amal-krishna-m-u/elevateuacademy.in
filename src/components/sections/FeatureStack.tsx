@@ -12,7 +12,7 @@ export const FeatureStack = () => {
     ];
 
     return (
-        <section className="py-32 relative bg-[#050505]">
+        <section id="about" className="py-32 relative bg-[#050505]">
             <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
                     <div className="relative lg:sticky lg:top-32 lg:h-fit">

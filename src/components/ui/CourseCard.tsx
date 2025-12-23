@@ -4,11 +4,13 @@ import { Course } from '@/lib/contentful';
 
 interface CourseCardProps {
     course: Course;
+    mode?: 'link' | 'modal';
+    onClick?: () => void;
 }
 
-export const CourseCard = ({ course }: CourseCardProps) => {
-    return (
-        <div className="group relative bg-[#111] border border-gray-800 rounded-3xl overflow-hidden hover:border-[var(--brand-yellow)] transition-all duration-500 flex flex-col h-full">
+export const CourseCard = ({ course, mode = 'link', onClick }: CourseCardProps) => {
+    const CardContent = () => (
+        <>
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10"></div>
 
             {/* Hover Glow Effect */}
@@ -38,14 +40,27 @@ export const CourseCard = ({ course }: CourseCardProps) => {
                             </span>
                         ))}
                     </div>
-                    <Link
-                        href={`/courses/${course.slug}`}
-                        className="flex items-center gap-2 font-bold uppercase tracking-wider text-sm hover:text-[var(--brand-yellow)] transition-colors z-30"
-                    >
+                    <span className="flex items-center gap-2 font-bold uppercase tracking-wider text-sm hover:text-[var(--brand-yellow)] transition-colors z-30">
                         View Syllabus <ArrowRight size={16} />
-                    </Link>
+                    </span>
                 </div>
             </div>
-        </div>
+        </>
+    );
+
+    const containerClasses = "group relative bg-[#111] border border-gray-800 rounded-3xl overflow-hidden hover:border-[var(--brand-yellow)] transition-all duration-500 flex flex-col h-full text-left w-full";
+
+    if (mode === 'modal') {
+        return (
+            <button onClick={onClick} className={containerClasses}>
+                <CardContent />
+            </button>
+        );
+    }
+
+    return (
+        <Link href={`/courses/${course.slug}`} className={containerClasses}>
+            <CardContent />
+        </Link>
     );
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { LandingPageData } from '@/lib/contentful';
+import { LandingPageData, Course, BlogPost } from '@/lib/contentful';
 import { Navbar } from './sections/Navbar';
 import { Hero } from './sections/Hero';
 import { Marquee } from './ui/Marquee';
@@ -12,44 +12,43 @@ import { FAQSection } from './sections/FAQ';
 import { Footer } from './sections/Footer';
 import { CustomCursor } from './ui/CustomCursor';
 import { MagneticButton } from './ui/MagneticButton';
+import { SyllabusModal } from './modals/SyllabusModal';
+import { BlogModal } from './modals/BlogModal';
+import Link from 'next/link';
 
 export const LandingPageClient = ({ data }: { data: LandingPageData }) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+    const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null);
 
     return (
         <>
             <CustomCursor />
 
-            {/* Navigation */}
-            <Navbar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
+            {/* Modals for Quick View */}
+            <SyllabusModal course={selectedCourse} isOpen={!!selectedCourse} onClose={() => setSelectedCourse(null)} />
+            <BlogModal post={selectedBlogPost} isOpen={!!selectedBlogPost} onClose={() => setSelectedBlogPost(null)} />
 
-            {/* Mobile Fullscreen Menu */}
-            <div className={`fixed inset-0 bg-black z-40 transition-transform duration-300 ease-in-out md:hidden flex flex-col items-center justify-center gap-8 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                {['Courses', 'About', 'Blog', 'FAQ'].map((item) => (
-                    <a
-                        key={item}
-                        href={`#${item.toLowerCase()}`}
-                        onClick={toggleMenu}
-                        className="text-3xl font-black font-montserrat uppercase hover:text-[var(--brand-yellow)] transition-colors"
-                    >
-                        {item}
-                    </a>
-                ))}
-                <div className="mt-8">
-                    <MagneticButton variant="primary" onClick={() => { toggleMenu(); document.getElementById('contact')?.scrollIntoView(); }}>
-                        Enquire Now
-                    </MagneticButton>
-                </div>
-            </div>
+            {/* Navigation (Self-contained) */}
+            <Navbar />
 
             <main>
                 <Hero />
                 <Marquee />
                 <FeatureStack />
-                <Programs courses={data.courses} />
-                <BlogSection posts={data.blogPosts} />
+
+                {/* Home Page uses "modal" mode for quick interaction */}
+                <Programs
+                    courses={data.courses.slice(0, 2)}
+                    mode="modal"
+                    onItemClick={setSelectedCourse}
+                />
+
+                <BlogSection
+                    posts={data.blogPosts.slice(0, 3)}
+                    mode="modal"
+                    onItemClick={setSelectedBlogPost}
+                />
+
                 <FAQSection faqs={data.faqs} />
                 <Footer />
             </main>

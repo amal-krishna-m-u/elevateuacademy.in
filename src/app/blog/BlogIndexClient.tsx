@@ -29,68 +29,47 @@ export const BlogIndexClient = ({ posts }: { posts: BlogPost[] }) => {
     return (
         <div className="min-h-screen bg-[#0a0a0a]">
             <CustomCursor />
-            <NavigationWrapper>
-                <main className="container mx-auto px-6 py-32">
+            <Navbar />
 
-                    <div className="mb-20">
-                        <RevealText>
-                            <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-[var(--brand-yellow)] transition-colors mb-6 text-sm font-mono uppercase tracking-widest">
-                                <ArrowLeft size={16} /> Back to Home
-                            </Link>
-                        </RevealText>
-                        <RevealText delay={100}>
-                            <h1 className="text-5xl md:text-7xl font-black font-montserrat text-white mb-6">
-                                KNOWLEDGE <span className="text-[var(--brand-yellow)]">HUB</span>
-                            </h1>
-                        </RevealText>
+            <main className="container mx-auto px-6 py-32">
+
+                <div className="mb-20">
+                    <RevealText>
+                        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-[var(--brand-yellow)] transition-colors mb-6 text-sm font-mono uppercase tracking-widest">
+                            <ArrowLeft size={16} /> Back to Home
+                        </Link>
+                    </RevealText>
+                    <RevealText delay={100}>
+                        <h1 className="text-5xl md:text-7xl font-black font-montserrat text-white mb-6">
+                            KNOWLEDGE <span className="text-[var(--brand-yellow)]">HUB</span>
+                        </h1>
+                    </RevealText>
+                </div>
+
+                <FilterBar
+                    categories={categories}
+                    activeCategory={selectedCategory}
+                    onFilterChange={setSelectedCategory}
+                    showSearch={true}
+                    onSearchChange={setSearchQuery}
+                />
+
+                {filteredPosts.length > 0 ? (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredPosts.map((post, index) => (
+                            <BlogCard key={post.sys.id} post={post} priority={index < 6} />
+                        ))}
                     </div>
+                ) : (
+                    <div className="py-20 text-center border border-dashed border-gray-800 rounded-3xl">
+                        <h3 className="text-2xl font-bold font-montserrat text-white mb-2">No articles found</h3>
+                        <p className="text-gray-500">Try adjusting your search or category.</p>
+                    </div>
+                )}
 
-                    <FilterBar
-                        categories={categories}
-                        activeCategory={selectedCategory}
-                        onFilterChange={setSelectedCategory}
-                        showSearch={true}
-                        onSearchChange={setSearchQuery}
-                    />
+            </main>
 
-                    {filteredPosts.length > 0 ? (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredPosts.map((post, index) => (
-                                <BlogCard key={post.sys.id} post={post} priority={index < 6} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="py-20 text-center border border-dashed border-gray-800 rounded-3xl">
-                            <h3 className="text-2xl font-bold font-montserrat text-white mb-2">No articles found</h3>
-                            <p className="text-gray-500">Try adjusting your search or category.</p>
-                        </div>
-                    )}
-
-                </main>
-            </NavigationWrapper>
+            <Footer />
         </div>
     );
 };
-
-const NavigationWrapper = ({ children }: { children: React.ReactNode }) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    return (
-        <>
-            <Navbar isMenuOpen={isMenuOpen} toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
-            <div className={`fixed inset-0 bg-black z-40 transition-transform duration-300 ease-in-out md:hidden flex flex-col items-center justify-center gap-8 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                {['Home', 'Courses', 'Blog', 'Contact'].map((item) => (
-                    <Link
-                        key={item}
-                        href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="text-3xl font-black font-montserrat uppercase hover:text-[var(--brand-yellow)] transition-colors"
-                    >
-                        {item}
-                    </Link>
-                ))}
-            </div>
-            {children}
-            <Footer />
-        </>
-    )
-}

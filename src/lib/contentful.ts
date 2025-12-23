@@ -1,6 +1,22 @@
 import { createClient, Entry } from 'contentful';
 import { Document } from '@contentful/rich-text-types';
 
+// Suppress 'url.parse' deprecation warning from Contentful SDK (Node 22+)
+if (typeof process !== 'undefined') {
+    const originalEmit = process.emit;
+    (process as any).emit = function (name: any, data: any, ...args: any[]) {
+        if (
+            name === 'warning' &&
+            typeof data === 'object' &&
+            data.name === 'DeprecationWarning' &&
+            data.message.includes('url.parse')
+        ) {
+            return false;
+        }
+        return originalEmit.apply(process, [name, data, ...args] as any);
+    };
+}
+
 // --- Types ---
 
 export interface Course {
@@ -112,12 +128,12 @@ function safeMapList(list: any[] | undefined): string[] {
 
 // --- Fetcher ---
 
-export async function getLandingPageData(): Promise<LandingPageData> {
+export async function getLandingPageData(limitCourses?: number, limitBlogs?: number): Promise<LandingPageData> {
     if (!client) {
         console.warn("⚠️ Contentful credentials not found. Using mock data.");
         return {
-            courses: MOCK_COURSES,
-            blogPosts: MOCK_BLOG_POSTS,
+            courses: limitCourses ? MOCK_COURSES.slice(0, limitCourses) : MOCK_COURSES,
+            blogPosts: limitBlogs ? MOCK_BLOG_POSTS.slice(0, limitBlogs) : MOCK_BLOG_POSTS,
             faqs: MOCK_FAQS,
         };
     }
@@ -125,9 +141,15 @@ export async function getLandingPageData(): Promise<LandingPageData> {
     try {
         // 1. Sort Blog Posts by Date desc ('-fields.date')
         // 2. Sort FAQs by Order asc ('fields.order')
+        const coursesQuery: any = { content_type: 'course', include: 2 };
+        if (limitCourses) coursesQuery.limit = limitCourses;
+
+        const blogsQuery: any = { content_type: 'blogPost', order: '-fields.date', include: 2 };
+        if (limitBlogs) blogsQuery.limit = limitBlogs;
+
         const [coursesRes, blogPostsRes, faqsRes] = await Promise.all([
-            client.getEntries({ content_type: 'course', include: 2 }),
-            client.getEntries({ content_type: 'blogPost', order: '-fields.date', include: 2 } as any),
+            client.getEntries(coursesQuery),
+            client.getEntries(blogsQuery),
             client.getEntries({ content_type: 'faq', order: 'fields.order', include: 2 } as any),
         ]);
 

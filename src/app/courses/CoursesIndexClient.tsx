@@ -54,73 +54,51 @@ export const CoursesIndexClient = ({ courses }: { courses: Course[] }) => {
                  It's controlled.
                  I need to manage that state here too.
              */}
-            <NavigationWrapper>
-                <main className="container mx-auto px-6 py-32">
+            {/* Navbar is now self-contained */}
+            <Navbar />
 
-                    <div className="mb-20">
-                        <RevealText>
-                            <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-[var(--brand-yellow)] transition-colors mb-6 text-sm font-mono uppercase tracking-widest">
-                                <ArrowLeft size={16} /> Back to Home
-                            </Link>
-                        </RevealText>
-                        <RevealText delay={100}>
-                            <h1 className="text-5xl md:text-7xl font-black font-montserrat text-white mb-6">
-                                OUR <span className="text-[var(--brand-yellow)]">COURSES</span>
-                            </h1>
-                        </RevealText>
-                        <RevealText delay={200}>
-                            <p className="text-xl text-gray-400 max-w-2xl">
-                                Explore our industry-leading diploma programs designed to get you hired.
-                            </p>
-                        </RevealText>
+            <main className="container mx-auto px-6 py-32">
+
+                <div className="mb-20">
+                    <RevealText>
+                        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-[var(--brand-yellow)] transition-colors mb-6 text-sm font-mono uppercase tracking-widest">
+                            <ArrowLeft size={16} /> Back to Home
+                        </Link>
+                    </RevealText>
+                    <RevealText delay={100}>
+                        <h1 className="text-5xl md:text-7xl font-black font-montserrat text-white mb-6">
+                            OUR <span className="text-[var(--brand-yellow)]">COURSES</span>
+                        </h1>
+                    </RevealText>
+                    <RevealText delay={200}>
+                        <p className="text-xl text-gray-400 max-w-2xl">
+                            Explore our industry-leading diploma programs designed to get you hired.
+                        </p>
+                    </RevealText>
+                </div>
+
+                <FilterBar
+                    categories={categories}
+                    activeCategory={selectedCategory}
+                    onFilterChange={setSelectedCategory}
+                />
+
+                {filteredCourses.length > 0 ? (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredCourses.map((course) => (
+                            <CourseCard key={course.sys.id} course={course} />
+                        ))}
                     </div>
+                ) : (
+                    <div className="py-20 text-center border border-dashed border-gray-800 rounded-3xl">
+                        <h3 className="text-2xl font-bold font-montserrat text-white mb-2">No courses found</h3>
+                        <p className="text-gray-500">Try adjusting your category filter.</p>
+                    </div>
+                )}
 
-                    <FilterBar
-                        categories={categories}
-                        activeCategory={selectedCategory}
-                        onFilterChange={setSelectedCategory}
-                    />
+            </main>
 
-                    {filteredCourses.length > 0 ? (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredCourses.map((course) => (
-                                <CourseCard key={course.sys.id} course={course} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="py-20 text-center border border-dashed border-gray-800 rounded-3xl">
-                            <h3 className="text-2xl font-bold font-montserrat text-white mb-2">No courses found</h3>
-                            <p className="text-gray-500">Try adjusting your category filter.</p>
-                        </div>
-                    )}
-
-                </main>
-            </NavigationWrapper>
+            <Footer />
         </div>
     );
 };
-
-// Helper for Navigation State (Since Navbar is controlled)
-const NavigationWrapper = ({ children }: { children: React.ReactNode }) => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    return (
-        <>
-            <Navbar isMenuOpen={isMenuOpen} toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
-            {/* Mobile Fullscreen Menu Logic (Reused) */}
-            <div className={`fixed inset-0 bg-black z-40 transition-transform duration-300 ease-in-out md:hidden flex flex-col items-center justify-center gap-8 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-                {['Home', 'Courses', 'Blog', 'Contact'].map((item) => (
-                    <Link
-                        key={item}
-                        href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="text-3xl font-black font-montserrat uppercase hover:text-[var(--brand-yellow)] transition-colors"
-                    >
-                        {item}
-                    </Link>
-                ))}
-            </div>
-            {children}
-            <Footer />
-        </>
-    )
-}
