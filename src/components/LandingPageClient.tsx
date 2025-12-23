@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Course, BlogPost, FAQ, LandingPageData } from '@/lib/contentful';
+import { LandingPageData } from '@/lib/contentful';
 import { Navbar } from './sections/Navbar';
 import { Hero } from './sections/Hero';
 import { Marquee } from './ui/Marquee';
@@ -10,26 +10,17 @@ import { Programs } from './sections/Programs';
 import { BlogSection } from './sections/BlogSection';
 import { FAQSection } from './sections/FAQ';
 import { Footer } from './sections/Footer';
-import { SyllabusModal } from './modals/SyllabusModal';
-import { BlogModal } from './modals/BlogModal';
 import { CustomCursor } from './ui/CustomCursor';
 import { MagneticButton } from './ui/MagneticButton';
-import { Menu, X } from 'lucide-react';
 
 export const LandingPageClient = ({ data }: { data: LandingPageData }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-    const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null);
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     return (
         <>
             <CustomCursor />
-
-            {/* Modals */}
-            <SyllabusModal course={selectedCourse} isOpen={!!selectedCourse} onClose={() => setSelectedCourse(null)} />
-            <BlogModal post={selectedBlogPost} isOpen={!!selectedBlogPost} onClose={() => setSelectedBlogPost(null)} />
 
             {/* Navigation */}
             <Navbar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} />
@@ -57,8 +48,8 @@ export const LandingPageClient = ({ data }: { data: LandingPageData }) => {
                 <Hero />
                 <Marquee />
                 <FeatureStack />
-                <Programs courses={data.courses} onSelectCourse={setSelectedCourse} />
-                <BlogSection posts={data.blogPosts} onSelectPost={setSelectedBlogPost} />
+                <Programs courses={data.courses} />
+                <BlogSection posts={data.blogPosts} />
                 <FAQSection faqs={data.faqs} />
                 <Footer />
             </main>

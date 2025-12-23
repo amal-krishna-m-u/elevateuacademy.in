@@ -14,8 +14,8 @@ export const FeatureStack = () => {
     return (
         <section className="py-32 relative bg-[#050505]">
             <div className="container mx-auto px-6">
-                <div className="grid lg:grid-cols-2 gap-20">
-                    <div className="sticky top-32 h-fit">
+                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+                    <div className="relative lg:sticky lg:top-32 lg:h-fit">
                         <RevealText>
                             <span className="text-[var(--brand-yellow)] font-mono uppercase tracking-widest text-sm">Why Choose Us</span>
                         </RevealText>
@@ -33,7 +33,7 @@ export const FeatureStack = () => {
                         </RevealText>
                     </div>
 
-                    <div className="space-y-32 pt-12">
+                    <div className="space-y-16 lg:space-y-32 pt-8 lg:pt-12">
                         {features.map((f, i) => {
                             // eslint-disable-next-line react-hooks/rules-of-hooks
                             const [ref, visible] = useOnScreen({ threshold: 0.5 });

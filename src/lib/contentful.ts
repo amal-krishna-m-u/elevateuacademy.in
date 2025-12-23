@@ -5,6 +5,7 @@ import { Document } from '@contentful/rich-text-types';
 
 export interface Course {
     sys: { id: string };
+    slug: string;
     title: string;
     category: string;
     duration: string;
@@ -17,6 +18,7 @@ export interface Course {
 
 export interface BlogPost {
     sys: { id: string };
+    slug: string;
     title: string;
     excerpt: string;
     coverImage: {
@@ -62,6 +64,7 @@ const client = isContentfulEnabled
 const MOCK_COURSES: Course[] = [
     {
         sys: { id: '1' },
+        slug: "logistics-supply-chain",
         title: "Logistics & Supply Chain",
         category: "Management",
         duration: "6 Months",
@@ -72,6 +75,7 @@ const MOCK_COURSES: Course[] = [
     },
     {
         sys: { id: '2' },
+        slug: "accounting-taxation",
         title: "Accounting & Taxation",
         category: "Finance",
         duration: "6 Months",
@@ -85,6 +89,7 @@ const MOCK_COURSES: Course[] = [
 const MOCK_BLOG_POSTS: BlogPost[] = [
     {
         sys: { id: '1' },
+        slug: "future-global-logistics-2025",
         title: "The Future of Global Logistics: 2025 Trends",
         excerpt: "From AI-driven supply chains to sustainable shipping, discover what the future holds.",
         date: "Oct 24, 2024",
@@ -131,6 +136,7 @@ export async function getLandingPageData(): Promise<LandingPageData> {
             const fields = entry.fields;
             return {
                 sys: { id: entry.sys.id },
+                slug: String(fields.slug || entry.sys.id), // Fallback to ID if slug missing
                 title: String(fields.title || ""),
                 category: String(fields.category || ""),
                 duration: String(fields.duration || ""),
@@ -159,6 +165,7 @@ export async function getLandingPageData(): Promise<LandingPageData> {
 
             return {
                 sys: { id: entry.sys.id },
+                slug: String(fields.slug || entry.sys.id),
                 title: String(fields.title || ""),
                 excerpt: String(fields.excerpt || ""),
                 date: String(fields.date || ""),
