@@ -3,9 +3,12 @@ import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 
 import { authConfig } from './auth.config';
+import { sql } from '@vercel/postgres';
+import bcrypt from 'bcryptjs';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
+
     providers: [
         Credentials({
             credentials: {
@@ -20,12 +23,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 if (parsedCredentials.success) {
                     const { email, password } = parsedCredentials.data;
 
-                    // Verify against Environment Variables
-                    const adminEmail = process.env.ADMIN_EMAIL;
-                    const adminPw = process.env.ADMIN_PASSWORD;
+                    try {
+                        const { rows } = await sql`SELECT * FROM users WHERE email = ${email}`;
+                        const user = rows[0];
 
-                    if (email === adminEmail && password === adminPw) {
-                        return { id: '1', name: 'Admin', email: adminEmail };
+                        if (!user) return null;
+
+                        const passwordsMatch = await bcrypt.compare(password, user.password);
+                        if (passwordsMatch) {
+                            return {
+                                id: user.id,
+                                name: user.name,
+                                email: user.email,
+                                role: user.role
+                            };
+                        }
+                    } catch (error) {
+                        console.error('Auth Error:', error);
+                        return null;
                     }
                 }
 

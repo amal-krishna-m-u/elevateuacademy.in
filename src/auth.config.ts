@@ -1,28 +1,56 @@
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
-    pages: {
-        signIn: '/api/auth/signin', // Default NextAuth sign-in page (or custom if we create one later)
-        // Actually, in previous steps we removed this to fix infinite loop. 
-        // But for proxy pattern, we can define it ONLY IF we have a custom page.
-        // The user's prompt step 1 says: "Define the configuration without the database adapter."
-        // And "Logic: If auth exists and user is on /admin, allow. Else, return false".
-        // If I put signIn: '/api/auth/signin', and I don't have a page, it might redirect to handler -> loop?
-        // Wait, the previous loop was caused because `pages` pointed to the handler URL.
-        // I will OMIT `pages` config for now as standard NextAuth UI is fine, OR set it to a real page if created.
-        // User instructions Step 1 don't explicitly force pages config, just "Define configuration".
-        // I'll stick to NO pages config to be safe against loops, unless I create a dedicated login page.
-        // Actually, standard behavior is safer.
-    },
+
     callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+                token.role = (user as any).role;
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (session?.user) {
+                session.user.id = token.id as string;
+                (session.user as any).role = token.role as string;
+            }
+            return session;
+        },
+        async redirect({ url, baseUrl }) {
+            // 1. Standardize the URL
+            const isRelative = url.startsWith("/");
+            const targetUrl = isRelative ? `${baseUrl}${url}` : url;
+
+            // 2. Security: Allow internal redirects
+            if (targetUrl.startsWith(baseUrl)) {
+                // If specifically going to root, prefer /admin
+                if (targetUrl === baseUrl || targetUrl === `${baseUrl}/`) {
+                    return `${baseUrl}/admin`;
+                }
+                return targetUrl;
+            }
+
+            // 3. Fallback default
+            return `${baseUrl}/admin`;
+        },
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
             const isOnAdmin = nextUrl.pathname.startsWith('/admin');
+            const isOnAuth = nextUrl.pathname.startsWith('/api/auth');
 
-            if (isOnAdmin) {
-                if (isLoggedIn) return true;
-                return false; // Redirect to login
+            // 1. Redirect logged-in users away from the Sign-In page to Admin
+            if (isLoggedIn && nextUrl.pathname.includes('/signin')) {
+                return Response.redirect(new URL('/admin', nextUrl));
             }
+
+            // 2. Allow access to other Auth API routes (session, csrf, signout, etc.)
+            if (isOnAuth) return true;
+
+            // 3. Protect Admin Dashboard
+            if (isOnAdmin && !isLoggedIn) return false;
+
+            // 4. Allow public access
             return true;
         },
     },

@@ -5,7 +5,22 @@ import EnquiryDataTable from '@/components/admin/EnquiryDataTable';
 
 export default async function AdminPage() {
     const session = await auth();
-    if (!session) return <div>Access Denied</div>;
+    if (!session) {
+        return (
+            <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white gap-4">
+                <h1 className="text-2xl font-bold">Access Denied</h1>
+                <p className="text-gray-400">You needs to be logged in to view this page.</p>
+                <form action={async () => {
+                    'use server';
+                    await signOut({ redirectTo: '/api/auth/signin' });
+                }}>
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-colors">
+                        Sign Out & Retry
+                    </button>
+                </form>
+            </div>
+        );
+    }
 
     // Fetch Enquiries & Serialize for Client Component
     const { rows } = await sql`SELECT * FROM enquiries ORDER BY created_at DESC LIMIT 100;`;
@@ -78,6 +93,14 @@ export default async function AdminPage() {
                             >
                                 <span className="text-2xl font-black">+</span>
                                 <span className="text-sm font-bold uppercase tracking-widest">View/Add FAQs</span>
+                            </a>
+
+                            <a
+                                href="/admin/users"
+                                className="p-6 bg-[#111] border border-gray-800 rounded-xl hover:border-[var(--brand-yellow)] hover:text-[var(--brand-yellow)] transition-all flex flex-col items-center justify-center gap-2 text-center"
+                            >
+                                <span className="text-2xl font-black">@</span>
+                                <span className="text-sm font-bold uppercase tracking-widest">Manage Team</span>
                             </a>
                         </div>
                     </div>

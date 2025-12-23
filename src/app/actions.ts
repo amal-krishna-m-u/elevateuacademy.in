@@ -83,7 +83,14 @@ export async function submitEnquiry(prevState: any, formData: FormData) {
     }
 }
 
+import { auth } from '@/auth';
+
 export async function deleteEnquiries(ids: string[]) {
+    const session = await auth();
+    if (!session?.user) {
+        return { success: false, message: 'Unauthorized' };
+    }
+
     try {
         // Convert string IDs to numbers (since DB uses SERIAL)
         const numericIds = ids.map(id => parseInt(id, 10)).filter(id => !isNaN(id));
