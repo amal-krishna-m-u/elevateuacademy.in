@@ -47,7 +47,10 @@ html {
 }
 
 /* Noise Texture */
+/* Noise Texture - Optimized for Mobile */
 .bg-noise {
+  display: none;
+  /* Hidden by default on mobile to save CPU */
   position: fixed;
   top: 0;
   left: 0;
@@ -57,6 +60,24 @@ html {
   z-index: 50;
   opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+@media (min-width: 768px) {
+  .bg-noise {
+    display: block;
+  }
+}
+
+/* Scroll Optimization */
+html,
+body {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Reduce GPU load for fixed elements */
+.fixed {
+  will-change: transform;
 }
 
 /* Selection Color */

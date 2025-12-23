@@ -7,7 +7,7 @@ import { RevealText } from '../ui/RevealText';
 export const Hero = () => {
     return (
         <header className="min-h-screen flex items-center relative overflow-hidden pt-20">
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--brand-yellow)] rounded-full blur-[180px] opacity-10 -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--brand-yellow)] rounded-full blur-3xl md:blur-[180px] opacity-10 -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-5xl">

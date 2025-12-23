@@ -29,7 +29,7 @@ export const Navbar = () => {
         <>
             <nav className={clsx(
                 "fixed top-0 w-full z-50 transition-all duration-500 border-b",
-                scrolled ? 'bg-black/90 backdrop-blur-md border-gray-800 py-4' : 'bg-transparent border-transparent py-8'
+                scrolled ? 'bg-black/95 md:bg-black/90 md:backdrop-blur-md border-gray-800 py-4' : 'bg-transparent border-transparent py-8'
             )}>
                 <div className="container mx-auto px-6 flex justify-between items-center">
                     {/* Logo */}

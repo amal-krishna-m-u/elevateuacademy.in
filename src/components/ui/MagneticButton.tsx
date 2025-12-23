@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, MouseEvent } from 'react';
+import React, { useRef, useState, useEffect, MouseEvent } from 'react';
 import clsx from 'clsx';
 
 interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,9 +17,14 @@ export const MagneticButton = ({
 }: MagneticButtonProps) => {
     const btnRef = useRef<HTMLButtonElement>(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+    }, []);
 
     const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
-        if (!btnRef.current) return;
+        if (isMobile || !btnRef.current) return;
         const { clientX, clientY } = e;
         const { left, top, width, height } = btnRef.current.getBoundingClientRect();
         const x = (clientX - (left + width / 2)) * 0.3;
