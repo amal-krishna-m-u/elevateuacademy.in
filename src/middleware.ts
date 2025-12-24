@@ -5,8 +5,8 @@ import { NextResponse } from "next/server";
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
-    const isLoggedIn = !!req.auth;
-    console.log(`[Middleware] Path: ${req.nextUrl.pathname} | LoggedIn: ${isLoggedIn}`);
+    // const isLoggedIn = !!req.auth;
+    // console.log(`[Middleware] Path: ${req.nextUrl.pathname} | LoggedIn: ${isLoggedIn}`);
 
     // authorized callback in auth.config.ts should handle the rest, 
     // but using 'auth' wrapper executes it automatically.

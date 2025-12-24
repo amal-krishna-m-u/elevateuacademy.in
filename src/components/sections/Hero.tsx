@@ -7,7 +7,7 @@ import { RevealText } from '../ui/RevealText';
 export const Hero = () => {
     return (
         <header className="min-h-screen flex items-center relative overflow-hidden pt-20">
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--brand-yellow)] rounded-full blur-3xl md:blur-[180px] opacity-10 -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
+            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[var(--brand-yellow)] rounded-full blur-3xl md:blur-[180px] opacity-10 -translate-y-1/2 translate-x-1/2 animate-pulse will-change-transform"></div>
 
             <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-5xl">
@@ -18,12 +18,10 @@ export const Hero = () => {
                         </div>
                     </RevealText>
 
-                    <RevealText delay={100}>
-                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-black font-montserrat leading-[0.9] mb-8 tracking-tight">
-                            ELEVATE <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">YOURSELF</span>.
-                        </h1>
-                    </RevealText>
+                    <h1 className="text-6xl md:text-8xl lg:text-9xl font-black font-montserrat leading-[0.9] mb-8 tracking-tight">
+                        ELEVATE <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">YOURSELF</span>.
+                    </h1>
 
                     <RevealText delay={200}>
                         <p className="text-xl text-gray-300 max-w-2xl leading-relaxed mb-12 border-l border-gray-800 pl-6">

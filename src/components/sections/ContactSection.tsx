@@ -5,6 +5,8 @@ import { MagneticButton } from '../ui/MagneticButton';
 import { submitEnquiry } from '@/app/actions';
 import { Loader2 } from 'lucide-react';
 import TurnstileWidget from '../ui/TurnstileWidget';
+import { useFormStatus } from 'react-dom';
+import { useOnScreen } from '@/hooks/useOnScreen';
 
 const initialState = {
     success: false,
@@ -22,18 +24,13 @@ function SubmitButton() {
     )
 }
 
-// Temporary: React 19 useActionState might be named differently in some Next.js RC versions or shimmed. 
-// Standard hook in Next 14 is useFormState from react-dom.
-// Since package.json says "react": "19.2.3", we should use `useActionState` (React 19) or `useFormState` (React 18 compat).
-// IMPORTANT: `useActionState` is React 19.
-import { useFormStatus } from 'react-dom';
-
 export const ContactSection = () => {
     const [state, formAction] = useActionState(submitEnquiry, initialState);
     const [turnstileToken, setTurnstileToken] = useState('');
+    const [ref, isVisible] = useOnScreen({ rootMargin: '100px' });
 
     return (
-        <div className="bg-[#111] p-10 rounded-3xl border border-gray-800 shadow-2xl relative overflow-hidden">
+        <div ref={ref} className="bg-[#111] p-10 rounded-3xl border border-gray-800 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--brand-yellow)] blur-[80px] opacity-20"></div>
             <h3 className="text-2xl font-bold mb-8 text-white">Quick Enquiry</h3>
 
@@ -64,7 +61,6 @@ export const ContactSection = () => {
                         </select>
                     </div>
                     {/* Honeypot Field (Hidden) to trap bots */}
-                    {/* Honeypot Field (Hidden) to trap bots */}
                     <input
                         type="text"
                         name="confirm_email"
@@ -73,12 +69,14 @@ export const ContactSection = () => {
                         autoComplete="off"
                     />
 
-                    {/* Turnstile Widget */}
-                    <div className="flex justify-center mb-4">
-                        <TurnstileWidget
-                            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
-                            onVerify={(token) => setTurnstileToken(token)}
-                        />
+                    {/* Turnstile Widget - Lazy Loaded */}
+                    <div className="flex justify-center mb-4 min-h-[65px]">
+                        {isVisible && (
+                            <TurnstileWidget
+                                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+                                onVerify={(token) => setTurnstileToken(token)}
+                            />
+                        )}
                     </div>
                     {/* Send token to server */}
                     <input type="hidden" name="cf-turnstile-response" value={turnstileToken} />
