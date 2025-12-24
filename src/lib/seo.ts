@@ -27,6 +27,7 @@ export interface SeoEntryFields {
 export interface SeoResult {
     metadata: Metadata;
     structuredData?: Record<string, any>;
+    source: 'contentful' | 'default';
 }
 
 const DEFAULT_METADATA: Metadata = {
@@ -38,7 +39,7 @@ const DEFAULT_METADATA: Metadata = {
 export async function getSeoMetadata(internalName: string): Promise<SeoResult> {
     if (!client) {
         console.warn('⚠️ Contentful client not available. Returning default SEO.');
-        return { metadata: DEFAULT_METADATA };
+        return { metadata: DEFAULT_METADATA, source: 'default' };
     }
 
     try {
@@ -51,7 +52,7 @@ export async function getSeoMetadata(internalName: string): Promise<SeoResult> {
 
         if (response.items.length === 0) {
             console.warn(`⚠️ SEO Entry '${internalName}' not found. Returning default.`);
-            return { metadata: DEFAULT_METADATA };
+            return { metadata: DEFAULT_METADATA, source: 'default' };
         }
 
         const fields = response.items[0].fields as unknown as SeoEntryFields;
@@ -83,10 +84,11 @@ export async function getSeoMetadata(internalName: string): Promise<SeoResult> {
         return {
             metadata,
             structuredData: fields.structuredData,
+            source: 'contentful'
         };
 
     } catch (error) {
         console.error('Error fetching SEO metadata:', error);
-        return { metadata: DEFAULT_METADATA };
+        return { metadata: DEFAULT_METADATA, source: 'default' };
     }
 }

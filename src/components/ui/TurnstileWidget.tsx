@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface TurnstileWidgetProps {
     siteKey: string;
@@ -12,6 +12,8 @@ declare global {
         turnstile?: {
             render: (element: HTMLElement, options: any) => string;
             reset: (widgetId: string) => void;
+            remove: (widgetId: string) => void;
+            getResponse: (widgetId: string) => string | undefined;
         };
         onTurnstileLoad?: () => void;
     }
@@ -20,59 +22,87 @@ declare global {
 export default function TurnstileWidget({ siteKey, onVerify }: TurnstileWidgetProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const widgetId = useRef<string | null>(null);
+    const [scriptLoaded, setScriptLoaded] = useState(false);
 
     // Use ref for onVerify to prevent re-running effect when parent function changes
     const onVerifyRef = useRef(onVerify);
 
-    // Update ref when prop changes
     useEffect(() => {
         onVerifyRef.current = onVerify;
     }, [onVerify]);
 
     useEffect(() => {
-        // Function to render the widget
-        const renderWidget = () => {
-            if (window.turnstile && containerRef.current && !widgetId.current) {
-                widgetId.current = window.turnstile.render(containerRef.current, {
-                    sitekey: siteKey,
-                    callback: (token: string) => onVerifyRef.current(token),
-                    'expired-callback': () => onVerifyRef.current(''),
-                    'error-callback': () => onVerifyRef.current(''),
-                    theme: 'dark', // Matches our dark UI
-                });
+        let cancelled = false;
+
+        const cleanupWidget = () => {
+            if (widgetId.current && window.turnstile) {
+                window.turnstile.remove(widgetId.current);
+                widgetId.current = null;
+            }
+            // Also ensure container is empty to be safe against double appends
+            if (containerRef.current) {
+                containerRef.current.innerHTML = '';
             }
         };
 
-        // Load Script if not present
-        if (!document.getElementById('turnstile-script')) {
-            const script = document.createElement('script');
-            script.id = 'turnstile-script';
-            script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad';
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
+        const renderWidget = () => {
+            if (cancelled) return;
+            if (!containerRef.current || !window.turnstile) return;
 
-            window.onTurnstileLoad = renderWidget;
-        } else if (window.turnstile) {
+            // Clean up any existing widget before rendering a new one
+            if (widgetId.current) {
+                window.turnstile.remove(widgetId.current);
+            }
+
+            try {
+                const id = window.turnstile.render(containerRef.current, {
+                    sitekey: siteKey,
+                    callback: (token: string) => {
+                        if (!cancelled) onVerifyRef.current(token);
+                    },
+                    'expired-callback': () => {
+                        if (!cancelled) onVerifyRef.current('');
+                    },
+                    'error-callback': () => {
+                        if (!cancelled) onVerifyRef.current('');
+                    },
+                    theme: 'dark',
+                });
+                widgetId.current = id;
+            } catch (e) {
+                console.error("Turnstile render error", e);
+            }
+        };
+
+        // Check if script is already loaded
+        if (window.turnstile) {
             renderWidget();
+        } else {
+            // Setup Global Callback
+            const existingOnLoad = window.onTurnstileLoad;
+            window.onTurnstileLoad = () => {
+                if (existingOnLoad) existingOnLoad();
+                setScriptLoaded(true); // Trigger re-run
+            };
+
+            // Inject Script if missing
+            if (!document.getElementById('turnstile-script')) {
+                const script = document.createElement('script');
+                script.id = 'turnstile-script';
+                script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad';
+                script.async = true;
+                script.defer = true;
+                document.head.appendChild(script);
+            }
         }
 
         return () => {
-            // Cleanup if needed, but usually we keep the script. 
-            // We could reset the widget on unmount if we wanted.
-            if (widgetId.current && window.turnstile) {
-                try {
-                    window.turnstile.reset(widgetId.current);
-                    widgetId.current = null;
-                } catch (e) {
-                    // Ignore reset errors
-                }
-            }
-            // Don't remove the script tag as other components might use it
+            cancelled = true;
+            cleanupWidget();
         };
-    }, [siteKey]); // Removed onVerify from dependency array
+    }, [siteKey, scriptLoaded]); // Re-run when script loads
 
     return (
-        <div ref={containerRef} className="min-h-[65px] flex items-center justify-center" />
+        <div ref={containerRef} className="min-h-[65px] flex items-center justify-center w-full" />
     );
 }

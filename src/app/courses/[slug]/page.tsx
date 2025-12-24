@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getLandingPageData, Course } from '@/lib/contentful';
+import { getLandingPageData, getCourseBySlug } from '@/lib/contentful';
+import { getSeoMetadata } from '@/lib/seo';
+import JsonLd from '@/components/JsonLd';
 import { ArrowLeft, CheckCircle, Clock, BookOpen, PenTool } from 'lucide-react';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { CustomCursor } from '@/components/ui/CustomCursor';
+import { Metadata } from 'next';
 
 // Generate static params for all courses to enable SSG
 export async function generateStaticParams() {
@@ -13,24 +16,90 @@ export async function generateStaticParams() {
     }));
 }
 
-export default async function CoursePage({ params }: { params: { slug: string } }) {
-    const data = await getLandingPageData();
-    // Resolve param promise if needed in older next versions, but safe here.
-    // In Next 15+ params is async, user is on Next 14+ but provided package.json says "next": "14.x" or similar? 
-    // Wait, user provided "next": "16.1.1". In Next 15+, params is Promise.
-    // However, generateStaticParams dictates the segments.
-    // Let's assume standard access. If error, we await params.
-
-    // Defensive find
+// 🚀 Dynamic Metadata
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const { slug } = await params;
-    const course = data.courses.find((c) => c.slug === slug);
+    const course = await getCourseBySlug(slug);
+
+    if (!course) return {};
+
+    // 1. Try to fetch dedicated SEO Entry first (e.g., "SEO - Logistics Course")
+    // We try variations if needed, but "SEO - {Title}" is the convention.
+    // Or we could have an optional 'seoId' field in the Course model, but for now we loosely match by name convention
+    // or just rely on fallback if specific entry doesn't exist.
+    // However, the seed data uses "SEO - Logistics Course" for "Logistics & Supply Chain" (mismatch).
+    // The user provided seed data internalName: 'SEO - Logistics Course'.
+    // The course title might be "Logistics & Supply Chain".
+    // Strategy: We can try a robust fallback or just search for `SEO - ${course.title}`.
+    // If that fails, we fallback to auto-generated.
+
+    const seoName = `SEO - ${course.title}`;
+    // Tip: In production, adding an explicit 'seoReference' field to the Course content model is better. 
+    // For now, we attempt the fetch.
+
+    // Note: getSeoMetadata uses exact match on internalName.
+    // If exact match fails, it returns DEFAULT. 
+    // We want Course Fallback instead of DEFAULT.
+
+    // Let's modify logic: check if we got SOURCE 'default' back.
+    const { metadata, source } = await getSeoMetadata(seoName);
+
+    if (source === 'default') {
+        // Fallback: Generate from Course Data
+        return {
+            title: `${course.title} | Elevate U Kochi`,
+            description: course.description.slice(0, 160),
+            keywords: course.modules,
+            openGraph: {
+                title: course.title,
+                description: course.description,
+                // images: [] // Add course image if available
+            }
+        };
+    }
+
+    return metadata;
+}
+
+export default async function CoursePage({ params }: { params: { slug: string } }) {
+    const { slug } = await params;
+
+    // Efficient Fetch
+    const course = await getCourseBySlug(slug);
 
     if (!course) {
         notFound();
     }
 
+    // 🧠 AEO: Structured Data (Course Schema)
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": course.title,
+        "description": course.description,
+        "provider": {
+            "@type": "Organization",
+            "name": "Elevate U",
+            "sameAs": "https://elevateu.com"
+        },
+        "hasCourseInstance": {
+            "@type": "CourseInstance",
+            "courseMode": "Blended",
+            "courseWorkload": course.duration
+        },
+        "offers": {
+            "@type": "Offer",
+            "category": course.category
+        },
+        "syllabusSections": course.modules.map(mod => ({
+            "@type": "Syllabus",
+            "name": mod
+        }))
+    };
+
     return (
         <main className="min-h-screen bg-[#0a0a0a] text-white">
+            <JsonLd data={jsonLd} />
             <CustomCursor />
 
             {/* Navigation / Header */}
@@ -90,12 +159,8 @@ export default async function CoursePage({ params }: { params: { slug: string } 
                                         <div>
                                             <h3 className="text-xl font-bold font-montserrat mb-2">{mod}</h3>
                                             {/* If syllabus JSON exists, we can try to find details for this module */}
-                                            {/* Note: User asked to Parse syllabus JSON structure { modules: [{ title, topics }] } */}
-                                            {/* Our types say modules is string[]. The JSON is in course.syllabus. */}
                                             {course.syllabus?.modules && Array.isArray(course.syllabus.modules) ? (
                                                 <ul className="list-disc list-inside text-gray-400 text-sm mt-3 space-y-1 ml-1">
-                                                    {/* Try to match module title or just render simple mapping if strings */}
-                                                    {/* Simple matching logic if possible, or just render topics if structure lines up index-wise */}
                                                     {course.syllabus.modules[index]?.topics?.map((topic: string, i: number) => (
                                                         <li key={i}>{topic}</li>
                                                     ))}

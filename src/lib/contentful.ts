@@ -224,3 +224,63 @@ export async function getLandingPageData(limitCourses?: number, limitBlogs?: num
         };
     }
 }
+
+export async function getCourseBySlug(slug: string): Promise<Course | null> {
+    if (!client) return MOCK_COURSES.find(c => c.slug === slug) || null;
+
+    try {
+        const response = await client.getEntries({
+            content_type: 'course',
+            'fields.slug': slug,
+            limit: 1,
+            include: 2,
+        });
+
+        if (response.items.length === 0) return null;
+
+        const entry: any = response.items[0];
+        const fields = entry.fields;
+
+        // Reusing the mapping logic (duplicated for now to avoid massive refactor of getLandingPageData inner function)
+        // Ideally should extract mapCourse but for minimal diff I'll inline.
+        const safeMapList = (list: any[]) => Array.isArray(list) ? list.map(String) : [];
+
+        return {
+            sys: { id: entry.sys.id },
+            slug: String(fields.slug || entry.sys.id),
+            title: String(fields.title || ""),
+            category: String(fields.category || ""),
+            duration: String(fields.duration || ""),
+            description: String(fields.description || ""),
+            modules: safeMapList(fields.modules as any[]),
+            highlights: safeMapList(fields.highlights as any[]),
+            tools: safeMapList(fields.tools as any[]),
+            syllabus: (fields.syllabus as Record<string, any>) || {},
+        };
+    } catch (error) {
+        console.error(`Error fetching course ${slug}:`, error);
+        return null;
+    }
+}
+
+export async function getAllFaqs(): Promise<FAQ[]> {
+    if (!client) return MOCK_FAQS;
+
+    try {
+        const response = await client.getEntries({
+            content_type: 'faq',
+            order: 'fields.order',
+            include: 2,
+        } as any);
+
+        return response.items.map((entry: any) => ({
+            sys: { id: entry.sys.id },
+            question: String(entry.fields.question || ""),
+            answer: String(entry.fields.answer || ""),
+            order: Number(entry.fields.order || 0)
+        }));
+    } catch (error) {
+        console.error("Error fetching FAQs:", error);
+        return MOCK_FAQS;
+    }
+}
