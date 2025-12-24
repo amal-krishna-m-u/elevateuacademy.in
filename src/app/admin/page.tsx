@@ -2,6 +2,7 @@ import { auth, signOut } from "@/auth";
 import { sql } from "@vercel/postgres";
 import { getLandingPageData } from "@/lib/contentful";
 import EnquiryDataTable from '@/components/admin/EnquiryDataTable';
+import { SeoButton } from '@/components/admin/SeoButton';
 
 export default async function AdminPage() {
     const session = await auth();
@@ -102,6 +103,9 @@ export default async function AdminPage() {
                                 <span className="text-2xl font-black">@</span>
                                 <span className="text-sm font-bold uppercase tracking-widest">Manage Team</span>
                             </a>
+
+                            {/* SEO Management */}
+                            <SeoButton />
                         </div>
                     </div>
 

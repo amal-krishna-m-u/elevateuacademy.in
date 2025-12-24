@@ -67,7 +67,7 @@ const isContentfulEnabled =
     process.env.CONTENTFUL_SPACE_ID &&
     process.env.CONTENTFUL_ACCESS_TOKEN;
 
-const client = isContentfulEnabled
+export const client = isContentfulEnabled
     ? createClient({
         space: process.env.CONTENTFUL_SPACE_ID!,
         accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
