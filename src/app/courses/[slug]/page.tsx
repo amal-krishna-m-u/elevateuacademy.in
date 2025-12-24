@@ -16,6 +16,8 @@ export async function generateStaticParams() {
     }));
 }
 
+export const revalidate = 3600;
+
 // 🚀 Dynamic Metadata
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const { slug } = await params;

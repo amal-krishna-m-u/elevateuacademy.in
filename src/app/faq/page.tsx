@@ -5,7 +5,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft, MessagesSquare } from 'lucide-react';
 import { CustomCursor } from '@/components/ui/CustomCursor';
-import { FAQAccordion } from '@/components/home/FAQSection'; // Reusing Home Component if possible or rebuilding simple one.
 
 export const revalidate = 3600;
 

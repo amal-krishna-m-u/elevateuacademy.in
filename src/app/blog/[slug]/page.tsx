@@ -16,6 +16,8 @@ export async function generateStaticParams() {
     }));
 }
 
+export const revalidate = 1200;
+
 // Rich Text Options
 const richTextOptions = {
     renderNode: {
