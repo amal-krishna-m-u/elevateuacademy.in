@@ -15,8 +15,13 @@ const createUserSchema = z.object({
 export async function createAdminUser(prevState: any, formData: FormData) {
     // 1. Verify Auth
     const session = await auth();
-    if (!session?.user) {
-        return { success: false, message: 'Unauthorized' };
+    // Check 1: Is user logged in?
+    // Check 2: Does user have the 'admin' role?
+    if (!session?.user || (session.user as any).role !== 'admin') {
+        return {
+            success: false,
+            message: "Unauthorized: You do not have permission to perform this action."
+        };
     }
 
     // 2. Validate Input
@@ -58,8 +63,13 @@ export async function createAdminUser(prevState: any, formData: FormData) {
 
 export async function deleteAdminUser(userId: string) {
     const session = await auth();
-    if (!session?.user) {
-        return { success: false, message: 'Unauthorized' };
+    // Check 1: Is user logged in?
+    // Check 2: Does user have the 'admin' role?
+    if (!session?.user || (session.user as any).role !== 'admin') {
+        return {
+            success: false,
+            message: "Unauthorized: You do not have permission to perform this action."
+        };
     }
 
     // Prevent self-deletion? 

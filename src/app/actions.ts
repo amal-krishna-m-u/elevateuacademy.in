@@ -87,8 +87,13 @@ import { auth } from '@/auth';
 
 export async function deleteEnquiries(ids: string[]) {
     const session = await auth();
-    if (!session?.user) {
-        return { success: false, message: 'Unauthorized' };
+    // Check 1: Is user logged in?
+    // Check 2: Does user have the 'admin' role?
+    if (!session?.user || (session.user as any).role !== 'admin') {
+        return {
+            success: false,
+            message: "Unauthorized: You do not have permission to perform this action."
+        };
     }
 
     try {
