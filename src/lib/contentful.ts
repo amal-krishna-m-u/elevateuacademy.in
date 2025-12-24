@@ -284,3 +284,48 @@ export async function getAllFaqs(): Promise<FAQ[]> {
         return MOCK_FAQS;
     }
 }
+
+export interface SitemapEntry {
+    slug: string;
+    updatedAt: string;
+}
+
+export async function getAllCourseSlugs(): Promise<SitemapEntry[]> {
+    if (!client) return MOCK_COURSES.map(c => ({ slug: c.slug, updatedAt: new Date().toISOString() }));
+
+    try {
+        const response = await client.getEntries({
+            content_type: 'course',
+            select: ['fields.slug', 'sys.updatedAt'],
+            limit: 100, // Should suffice for now
+        } as any);
+
+        return response.items.map((entry: any) => ({
+            slug: String(entry.fields.slug || entry.sys.id),
+            updatedAt: entry.sys.updatedAt,
+        }));
+    } catch (error) {
+        console.error("Error fetching course slugs:", error);
+        return [];
+    }
+}
+
+export async function getAllBlogPostSlugs(): Promise<SitemapEntry[]> {
+    if (!client) return MOCK_BLOG_POSTS.map(b => ({ slug: b.slug, updatedAt: new Date().toISOString() }));
+
+    try {
+        const response = await client.getEntries({
+            content_type: 'blogPost',
+            select: ['fields.slug', 'sys.updatedAt'],
+            limit: 100,
+        } as any);
+
+        return response.items.map((entry: any) => ({
+            slug: String(entry.fields.slug || entry.sys.id),
+            updatedAt: entry.sys.updatedAt,
+        }));
+    } catch (error) {
+        console.error("Error fetching blog slugs:", error);
+        return [];
+    }
+}

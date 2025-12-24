@@ -38,7 +38,6 @@ const DEFAULT_METADATA: Metadata = {
 
 export async function getSeoMetadata(internalName: string): Promise<SeoResult> {
     if (!client) {
-        console.warn('⚠️ Contentful client not available. Returning default SEO.');
         return { metadata: DEFAULT_METADATA, source: 'default' };
     }
 
@@ -51,7 +50,6 @@ export async function getSeoMetadata(internalName: string): Promise<SeoResult> {
         });
 
         if (response.items.length === 0) {
-            console.warn(`⚠️ SEO Entry '${internalName}' not found. Returning default.`);
             return { metadata: DEFAULT_METADATA, source: 'default' };
         }
 

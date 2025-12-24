@@ -17,8 +17,12 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.elevateuacademy.in'),
   title: "Elevate U Academy",
   description: "Career-focused logistics and finance training.",
+  alternates: {
+    canonical: './',
+  },
 };
 
 export default function RootLayout({

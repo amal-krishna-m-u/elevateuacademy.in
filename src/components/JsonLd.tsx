@@ -7,7 +7,7 @@ interface JsonLdProps {
 }
 
 export default function JsonLd({ data }: JsonLdProps) {
-    if (!data) return null;
+    if (!data || Object.keys(data).length === 0) return null;
 
     return (
         <script
