@@ -26,7 +26,7 @@ export const Hero = () => {
                     </RevealText>
 
                     <RevealText delay={200}>
-                        <p className="text-xl text-gray-400 max-w-2xl leading-relaxed mb-12 border-l border-gray-800 pl-6">
+                        <p className="text-xl text-gray-300 max-w-2xl leading-relaxed mb-12 border-l border-gray-800 pl-6">
                             The gap between education and employment ends here.
                             Practical training in <span className="text-white font-bold">Logistics</span> & <span className="text-white font-bold">Finance</span> designed to get you hired.
                         </p>

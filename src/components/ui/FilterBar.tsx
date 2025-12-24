@@ -27,8 +27,8 @@ export const FilterBar = ({
                         key={cat}
                         onClick={() => onFilterChange(cat)}
                         className={`px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wider transition-all border ${activeCategory === cat
-                                ? 'bg-[var(--brand-yellow)] text-black border-[var(--brand-yellow)]'
-                                : 'bg-[#111] text-gray-400 border-gray-800 hover:border-gray-600'
+                            ? 'bg-[var(--brand-yellow)] text-black border-[var(--brand-yellow)]'
+                            : 'bg-[#111] text-gray-300 border-gray-800 hover:border-gray-600'
                             }`}
                     >
                         {cat}

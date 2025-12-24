@@ -47,7 +47,7 @@ export const FeatureStack = () => {
                                         <f.icon size={40} />
                                     </div>
                                     <h3 className="text-3xl font-bold text-white mb-4 font-montserrat">{f.title}</h3>
-                                    <p className="text-gray-400 text-xl leading-relaxed border-l-2 border-[var(--brand-yellow)] pl-6">
+                                    <p className="text-gray-300 text-xl leading-relaxed border-l-2 border-[var(--brand-yellow)] pl-6">
                                         {f.desc}
                                     </p>
                                 </div>

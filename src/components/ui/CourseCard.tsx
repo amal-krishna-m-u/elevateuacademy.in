@@ -28,7 +28,7 @@ export const CourseCard = ({ course, mode = 'link', onClick }: CourseCardProps) 
                     {course.title}
                 </h3>
 
-                <p className="text-gray-400 mb-8 leading-relaxed line-clamp-3">
+                <p className="text-gray-300 mb-8 line-clamp-3 leading-relaxed">
                     {course.description}
                 </p>
 

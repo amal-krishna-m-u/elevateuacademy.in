@@ -18,8 +18,8 @@ export const BlogSection = ({ posts, onItemClick, mode = 'link' }: BlogSectionPr
                         <span className="text-[var(--brand-yellow)] font-mono uppercase tracking-widest text-sm mb-2 block">Knowledge Hub</span>
                         <h2 className="text-5xl font-black font-montserrat text-white">LATEST INSIGHTS</h2>
                     </div>
-                    <Link href="/blog">
-                        <MagneticButton variant="outline" className="hidden md:flex">
+                    <Link href="/blog" className="w-full md:w-auto">
+                        <MagneticButton variant="outline" className="flex w-full md:w-auto justify-center">
                             View All Articles
                         </MagneticButton>
                     </Link>

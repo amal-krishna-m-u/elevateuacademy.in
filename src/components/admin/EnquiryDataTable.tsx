@@ -179,7 +179,7 @@ export default function EnquiryDataTable({ initialEnquiries }: EnquiryDataTableP
             {/* Data Grid */}
             <div className="bg-[#111] border border-gray-800 rounded-xl overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-400">
+                    <table className="w-full text-sm text-left text-gray-300">
                         <thead className="text-xs text-[var(--brand-yellow)] uppercase bg-[#0a0a0a] border-b border-gray-800">
                             <tr>
                                 <th className="p-4 w-10">

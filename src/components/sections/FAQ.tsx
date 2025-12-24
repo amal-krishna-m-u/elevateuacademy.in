@@ -19,6 +19,9 @@ export const FAQSection = ({ faqs }: FAQSectionProps) => {
                 <div className="text-center mb-20">
                     <span className="text-[var(--brand-yellow)] font-mono uppercase tracking-widest text-sm mb-2 block">Support</span>
                     <h2 className="text-5xl font-black font-montserrat text-white">COMMON QUERIES</h2>
+                    <p className="text-gray-300 mt-4 max-w-2xl mx-auto">
+                        Everything you need to know about our courses and campus.
+                    </p>
                 </div>
 
                 <div className="space-y-4">
@@ -43,7 +46,7 @@ export const FAQSection = ({ faqs }: FAQSectionProps) => {
                             <div
                                 className={`transition-all duration-300 ease-in-out overflow-hidden ${openIndex === i ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}
                             >
-                                <div className="p-6 pt-0 text-gray-400 leading-relaxed text-lg border-t border-gray-800/50 mt-2">
+                                <div className="px-6 pb-6 text-gray-300 leading-relaxed border-t border-gray-800/50 pt-4">
                                     {faq.answer}
                                 </div>
                             </div>

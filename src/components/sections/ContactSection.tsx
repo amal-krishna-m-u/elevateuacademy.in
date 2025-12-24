@@ -40,7 +40,7 @@ export const ContactSection = () => {
             {state.success ? (
                 <div className="bg-green-900/20 border border-green-800 p-6 rounded-2xl text-center">
                     <h4 className="text-xl font-bold text-green-500 mb-2">Application Received!</h4>
-                    <p className="text-gray-400">We'll get back to you shortly.</p>
+                    <p className="text-gray-300">We'll get back to you shortly.</p>
                 </div>
             ) : (
                 <form className="space-y-6" action={formAction}>
@@ -57,7 +57,7 @@ export const ContactSection = () => {
                         )}
                     </div>
                     <div>
-                        <select name="course" className="w-full bg-[#050505] border border-gray-800 p-4 rounded-xl text-white focus:border-[var(--brand-yellow)] focus:outline-none transition-colors appearance-none">
+                        <select name="course" aria-label="Select Course" className="w-full bg-[#050505] border border-gray-800 p-4 rounded-xl text-white focus:border-[var(--brand-yellow)] focus:outline-none transition-colors appearance-none">
                             <option value="">Select Course...</option>
                             <option value="Logistics & Supply Chain">Logistics & Supply Chain</option>
                             <option value="Accounting & Finance">Accounting & Finance</option>

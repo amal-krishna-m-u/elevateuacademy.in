@@ -46,7 +46,7 @@ export const BlogModal = ({ post, isOpen, onClose }: BlogModalProps) => {
                 <div className="p-8 md:p-12">
                     <h2 className="text-3xl md:text-4xl font-black font-montserrat text-white mb-8 leading-tight">{post.title}</h2>
 
-                    <div className="prose prose-invert prose-lg max-w-none text-gray-400">
+                    <div className="prose prose-invert prose-lg max-w-none text-gray-300">
                         <p className="lead text-xl text-white font-light mb-6">
                             {post.excerpt}
                         </p>

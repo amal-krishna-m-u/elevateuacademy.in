@@ -38,7 +38,7 @@ export const BlogCard = ({ post, priority = false, mode = 'link', onClick }: Blo
                 </div>
             </div>
 
-            <div className="flex items-center gap-3 text-gray-500 text-xs font-mono mb-3">
+            <div className="flex items-center gap-4 text-xs font-mono text-gray-300 mb-4">
                 <Calendar size={12} /> <DateFormatter dateString={post.date} />
             </div>
 
