@@ -20,7 +20,6 @@ export const Navbar = () => {
 
     const navItems = [
         { label: 'Courses', href: '/courses' },
-        { label: 'Blog', href: '/blog' },
         { label: 'About', href: '/#about' },
         { label: 'FAQ', href: '/#faq' }
     ];

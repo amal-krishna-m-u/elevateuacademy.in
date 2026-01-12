@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle, Clock, BookOpen, PenTool } from 'lucide-react';
 import { MagneticButton } from '@/components/ui/MagneticButton';
 import { CustomCursor } from '@/components/ui/CustomCursor';
 import { Metadata } from 'next';
+import { Footer } from '@/components/sections/Footer';
 
 // Generate static params for all courses to enable SSG
 export async function generateStaticParams() {
@@ -25,25 +26,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     if (!course) return {};
 
-    // 1. Try to fetch dedicated SEO Entry first (e.g., "SEO - Logistics Course")
-    // We try variations if needed, but "SEO - {Title}" is the convention.
-    // Or we could have an optional 'seoId' field in the Course model, but for now we loosely match by name convention
-    // or just rely on fallback if specific entry doesn't exist.
-    // However, the seed data uses "SEO - Logistics Course" for "Logistics & Supply Chain" (mismatch).
-    // The user provided seed data internalName: 'SEO - Logistics Course'.
-    // The course title might be "Logistics & Supply Chain".
-    // Strategy: We can try a robust fallback or just search for `SEO - ${course.title}`.
-    // If that fails, we fallback to auto-generated.
-
     const seoName = `SEO - ${course.title}`;
-    // Tip: In production, adding an explicit 'seoReference' field to the Course content model is better. 
-    // For now, we attempt the fetch.
-
-    // Note: getSeoMetadata uses exact match on internalName.
-    // If exact match fails, it returns DEFAULT. 
-    // We want Course Fallback instead of DEFAULT.
-
-    // Let's modify logic: check if we got SOURCE 'default' back.
     const { metadata, source } = await getSeoMetadata(seoName);
 
     if (source === 'default') {
@@ -55,7 +38,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             openGraph: {
                 title: course.title,
                 description: course.description,
-                // images: [] // Add course image if available
             }
         };
     }
@@ -139,7 +121,9 @@ export default async function CoursePage({ params }: { params: { slug: string } 
                     </p>
 
                     <div className="flex gap-4">
-                        <MagneticButton variant="primary">Enquire Now</MagneticButton>
+                        <Link href="#contact">
+                            <MagneticButton variant="primary">Enquire Now</MagneticButton>
+                        </Link>
                     </div>
                 </div>
 
@@ -209,6 +193,8 @@ export default async function CoursePage({ params }: { params: { slug: string } 
                 </div>
 
             </article>
+
+            <Footer />
         </main>
     );
 }

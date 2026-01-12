@@ -43,11 +43,12 @@ export const LandingPageClient = ({ data }: { data: LandingPageData }) => {
                     onItemClick={setSelectedCourse}
                 />
 
-                <BlogSection
+                {/* Blog Section Disabled */}
+                {/* <BlogSection
                     posts={data.blogPosts.slice(0, 3)}
                     mode="modal"
                     onItemClick={setSelectedBlogPost}
-                />
+                /> */}
 
                 <FAQSection faqs={data.faqs} />
                 <Footer />

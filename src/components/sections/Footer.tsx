@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, MapPin } from 'lucide-react';
+import { Phone, MapPin, Mail } from 'lucide-react';
 import { ContactSection } from './ContactSection';
 
 export const Footer = () => {
@@ -19,16 +19,32 @@ export const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-sm uppercase tracking-widest">Call Us</p>
-                                    <p className="text-2xl font-bold font-mono">+91 98765 43210</p>
+                                    <p className="text-2xl font-bold font-mono">80756 47771</p>
+                                    <p className="text-xl font-bold font-mono text-gray-400 group-hover:text-white transition-colors">70343 34489</p>
                                 </div>
                             </div>
+
+                            <div className="flex items-center gap-6 group">
+                                <div className="w-16 h-16 rounded-full border border-gray-800 flex items-center justify-center text-white group-hover:bg-[var(--brand-yellow)] group-hover:text-black transition-all">
+                                    <Mail size={24} />
+                                </div>
+                                <div>
+                                    <p className="text-gray-500 text-sm uppercase tracking-widest">Email Us</p>
+                                    <p className="text-xl font-bold break-all">elevateuacademy25@gmail.com</p>
+                                </div>
+                            </div>
+
                             <div className="flex items-center gap-6 group">
                                 <div className="w-16 h-16 rounded-full border border-gray-800 flex items-center justify-center text-white group-hover:bg-[var(--brand-yellow)] group-hover:text-black transition-all">
                                     <MapPin size={24} />
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-sm uppercase tracking-widest">Visit Campus</p>
-                                    <p className="text-xl font-bold">123, Growth Tower, Kochi</p>
+                                    <p className="text-lg font-bold leading-tight max-w-xs text-gray-200">
+                                        3rd Floor Paragon Tower,<br />
+                                        On top of Royal Enfield showroom,<br />
+                                        Near Lulu Mall, Mankave, Calicut.
+                                    </p>
                                 </div>
                             </div>
                         </div>
