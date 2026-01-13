@@ -142,7 +142,8 @@ export async function getLandingPageData(limitCourses?: number, limitBlogs?: num
         // 1. Sort Blog Posts by Date desc ('-fields.date')
         // 2. Sort FAQs by Order asc ('fields.order')
         const coursesQuery: any = { content_type: 'course', include: 2 };
-        if (limitCourses) coursesQuery.limit = limitCourses;
+        // Fetch ALL courses to ensure we can sort them correctly in memory
+        // if (limitCourses) coursesQuery.limit = limitCourses; <--- Removed to allow full fetch & sort
 
         const blogsQuery: any = { content_type: 'blogPost', order: '-fields.date', include: 2 };
         if (limitBlogs) blogsQuery.limit = limitBlogs;
@@ -207,10 +208,22 @@ export async function getLandingPageData(limitCourses?: number, limitBlogs?: num
             };
         };
 
+        const sortedCourses = coursesRes.items.map(mapCourse).sort((a, b) => {
+            const getPriority = (course: Course) => {
+                const t = course.title.toLowerCase();
+                if (t.includes('logistics')) return 1;
+                if (t.includes('office administration')) return 2;
+                if (t.includes('accounting')) return 3;
+                if (t.includes('corporate')) return 4;
+                return 99;
+            };
+            return getPriority(a) - getPriority(b);
+        });
+
         console.log("✅ Successfully fetched live data from Contentful!");
 
         return {
-            courses: coursesRes.items.map(mapCourse),
+            courses: limitCourses ? sortedCourses.slice(0, limitCourses) : sortedCourses,
             blogPosts: blogPostsRes.items.map(mapBlogPost),
             faqs: faqsRes.items.map(mapFAQ),
         };
