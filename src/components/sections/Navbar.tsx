@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { MagneticButton } from '../ui/MagneticButton';
 import clsx from 'clsx';
@@ -28,27 +29,39 @@ export const Navbar = () => {
         <>
             <nav className={clsx(
                 "fixed top-0 w-full z-50 transition-all duration-500 border-b",
-                scrolled ? 'bg-black/95 md:bg-black/90 md:backdrop-blur-md border-gray-800 py-4' : 'bg-transparent border-transparent py-8'
+                // Revert to Dark Theme: Black/95 on scroll, transparent at top
+                scrolled ? 'bg-black/95 md:bg-black/90 md:backdrop-blur-md border-gray-800 py-3' : 'bg-transparent border-transparent py-8'
             )}>
                 <div className="container mx-auto px-6 flex justify-between items-center">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-4 group cursor-pointer z-50">
-                        <div className="relative w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md bg-transparent">
-                            <div className={clsx("absolute inset-0 flex items-center justify-center text-xl font-black bg-[var(--brand-yellow)] text-black transition-all duration-300", scrolled ? 'opacity-0 group-hover:opacity-100' : 'opacity-100 group-hover:opacity-0')}>
-                                EU
-                            </div>
-                            <div className={clsx("absolute inset-0 flex items-center justify-center text-xl font-black bg-white text-black transition-all duration-300", scrolled ? 'opacity-100 group-hover:opacity-0' : 'opacity-0 group-hover:opacity-100')}>
-                                EU
-                            </div>
-                        </div>
+                    {/* Logo - Zoomed Content, Black/Yellow (No Filter) */}
+                    {/* Logo - Zoomed Content, Black/Yellow (No Filter) */}
+                    <Link href="/" className="flex items-center gap-4 group cursor-pointer z-50 py-2" aria-label="Home">
+                        {/* Logo Container: Constrained height to keep navbar small */}
+                        <div className={clsx(
+                            "relative flex items-center justify-start transition-all duration-500 bg-transparent",
+                            // Scroll: h-12 (48px) mobile, h-16 (64px) desktop -> keeps navbar small
+                            // Top: h-16 mobile, h-24 desktop -> respectable size but not huge
+                            scrolled ? "w-48 h-12 md:w-80 md:h-16" : "w-64 h-16 md:w-96 md:h-24"
+                        )}>
+                            {/* Fixed Ambient Light (White) - Increased opacity for visibility */}
+                            <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-white/40 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2 -z-10 pointer-events-none"></div>
 
-                        <div className="font-montserrat leading-tight select-none">
-                            <span className="block font-bold text-xl tracking-tight text-white">ELEVATE U</span>
-                            <span className="text-[var(--brand-yellow)] text-xs tracking-[0.3em] font-medium">ACADEMY</span>
+                            <Image
+                                src="/brand_logo.svg"
+                                alt="Elevate U Logo"
+                                fill
+                                className={clsx(
+                                    "object-contain object-left transition-all duration-500 origin-left",
+                                    // Zoom effect
+                                    "scale-[1.8]",
+                                    // Removed stacked filters, relying on Ambient Light
+                                    "drop-shadow-sm"
+                                )}
+                            />
                         </div>
                     </Link>
 
-                    {/* Desktop Menu */}
+                    {/* Desktop Menu - Revert to White Text */}
                     <div className="hidden md:flex items-center gap-8">
                         {navItems.map((item) => (
                             <Link key={item.label} href={item.href} className="text-sm font-bold uppercase tracking-widest text-white hover:text-[var(--brand-yellow)] transition-colors relative group">
