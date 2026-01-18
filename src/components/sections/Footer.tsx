@@ -19,8 +19,8 @@ export const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-sm uppercase tracking-widest">Call Us</p>
-                                    <p className="text-2xl font-bold font-mono">80756 47771</p>
-                                    <p className="text-xl font-bold font-mono text-gray-400 group-hover:text-white transition-colors">70343 34489</p>
+                                    <a href="tel:+918075647771" className="text-2xl font-bold font-mono hover:text-white transition-colors block">80756 47771</a>
+                                    <a href="tel:+917034334489" className="text-xl font-bold font-mono text-gray-400 group-hover:text-white transition-colors block">70343 34489</a>
                                 </div>
                             </div>
 
@@ -30,7 +30,7 @@ export const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-sm uppercase tracking-widest">Email Us</p>
-                                    <p className="text-xl font-bold break-all">elevateuacademy25@gmail.com</p>
+                                    <a href="mailto:contact@elevateuacademy.in" className="text-xl font-bold break-all hover:text-white transition-colors">contact@elevateuacademy.in</a>
                                 </div>
                             </div>
 
@@ -40,11 +40,11 @@ export const Footer = () => {
                                 </div>
                                 <div>
                                     <p className="text-gray-500 text-sm uppercase tracking-widest">Visit Campus</p>
-                                    <p className="text-lg font-bold leading-tight max-w-xs text-gray-200">
+                                    <a href="https://maps.app.goo.gl/sqyXaaKjtKodz9JJA" target="_blank" rel="noopener noreferrer" className="text-lg font-bold leading-tight max-w-xs text-gray-200 hover:text-white transition-colors block">
                                         3rd Floor Paragon Tower,<br />
                                         On top of Royal Enfield showroom,<br />
                                         Near Lulu Mall, Mankave, Calicut.
-                                    </p>
+                                    </a>
                                 </div>
                             </div>
                         </div>

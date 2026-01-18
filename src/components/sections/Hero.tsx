@@ -34,9 +34,9 @@ export const Hero = () => {
                         <MagneticButton variant="primary" onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}>
                             Explore Courses <ArrowUpRight className="ml-2" size={20} />
                         </MagneticButton>
-                        <MagneticButton variant="outline">
+                        {/* <MagneticButton variant="outline">
                             <PlayCircle className="mr-2" size={20} /> Watch Video
-                        </MagneticButton>
+                        </MagneticButton> */}
                     </div>
                 </div>
             </div>

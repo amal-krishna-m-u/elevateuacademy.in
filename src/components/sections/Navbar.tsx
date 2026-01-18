@@ -43,19 +43,17 @@ export const Navbar = () => {
                             // Top: h-16 mobile, h-24 desktop -> respectable size but not huge
                             scrolled ? "w-48 h-12 md:w-80 md:h-16" : "w-64 h-16 md:w-96 md:h-24"
                         )}>
-                            {/* Fixed Ambient Light (White) - Increased opacity for visibility */}
-                            <div className="absolute top-1/2 left-0 w-[600px] h-[600px] bg-white/40 rounded-full blur-[100px] -translate-y-1/2 -translate-x-1/2 -z-10 pointer-events-none"></div>
+
 
                             <Image
-                                src="/brand_logo.svg"
+                                src="/brand_logo_white.svg"
                                 alt="Elevate U Logo"
                                 fill
                                 className={clsx(
                                     "object-contain object-left transition-all duration-500 origin-left",
                                     // Zoom effect
                                     "scale-[1.8]",
-                                    // Removed stacked filters, relying on Ambient Light
-                                    "drop-shadow-sm"
+
                                 )}
                             />
                         </div>
