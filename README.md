@@ -62,6 +62,8 @@ We inject standard **JSON-LD** (JavaScript Object Notation for Linked Data) into
     }
     ```
 
+    - new build
+
 ## ⚡ Managing SEO
 
 Go to `/admin` dashboard and click **"Manage SEO"**.
