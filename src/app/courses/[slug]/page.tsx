@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     if (source === 'default') {
         // Fallback: Generate from Course Data
         return {
-            title: `${course.title} | Elevate U Kochi`,
+            title: `${course.title} | Elevate U Calicut`,
             description: course.description.slice(0, 160),
             keywords: course.modules,
             openGraph: {

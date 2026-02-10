@@ -14,7 +14,7 @@ export const Hero = () => {
                     <RevealText delay={0}>
                         <div className="flex items-center gap-4 mb-6">
                             <span className="w-12 h-[1px] bg-[var(--brand-yellow)]"></span>
-                            <span className="text-[var(--brand-yellow)] font-mono uppercase tracking-widest text-sm">Admissions Open 2025</span>
+                            <span className="text-[var(--brand-yellow)] font-mono uppercase tracking-widest text-sm">Admissions Open 2026</span>
                         </div>
                     </RevealText>
 

@@ -55,7 +55,7 @@ export const Footer = () => {
             </section>
 
             <footer className="py-8 text-center text-gray-600 text-sm border-t border-gray-900 bg-black">
-                <p>&copy; 2025 Elevate U Academy. All rights reserved.</p>
+                <p>&copy; 2026 Elevate U Academy. All rights reserved.</p>
             </footer>
         </>
     );
